@@ -1,0 +1,341 @@
+import { useMemo, useState } from 'react';
+
+const heritageItems = [
+  {
+    id: 1,
+    title: 'Founders Hall',
+    category: 'Architecture',
+    era: '1920s',
+    year: 1924,
+    location: 'North Courtyard',
+    x: 52,
+    y: 38,
+    accent: '#f0b429',
+    summary:
+      'The original stone facade, ceremonial stair, and carved arches celebrate the university’s founding values and academic legacy.',
+    description:
+      'Founders Hall stands as the symbolic heart of the campus. Designed in the early twentieth century, it remains the setting for graduations, public lectures, and the university’s most cherished ceremonies.',
+    highlights: ['Heritage stonework', 'Graduation venue', 'Historic archive rooms']
+  },
+  {
+    id: 2,
+    title: 'Old Observatory',
+    category: 'Science',
+    era: '1930s',
+    year: 1936,
+    location: 'Hill Crest',
+    x: 70,
+    y: 24,
+    accent: '#6bb8ff',
+    summary:
+      'A landmark in astronomy education with a restored domed roof and preserved instruments from the first scientific era of the university.',
+    description:
+      'The observatory once housed a powerful refracting telescope used to support studies in astronomy, meteorology, and mathematics. It is now a public learning heritage site.',
+    highlights: ['Historic telescope', 'Open-house nights', 'Astronomy gallery']
+  },
+  {
+    id: 3,
+    title: 'Student Memorial Garden',
+    category: 'Memorial',
+    era: '1940s',
+    year: 1948,
+    location: 'South Lawn',
+    x: 40,
+    y: 60,
+    accent: '#7dbb73',
+    summary:
+      'A quiet commemorative landscape for alumni and student leaders whose service shaped the university’s identity.',
+    description:
+      'Planted with heritage trees and stone benches, the garden memorializes those who championed scholarship, civic leadership, and social change across generations.',
+    highlights: ['Memorial inscriptions', 'Annual remembrance', 'Community gatherings']
+  },
+  {
+    id: 4,
+    title: 'Museum of Local History',
+    category: 'Culture',
+    era: '1950s',
+    year: 1954,
+    location: 'West Arcade',
+    x: 30,
+    y: 45,
+    accent: '#ff8f70',
+    summary:
+      'This collection of documents, tools, and oral histories preserves the story of the region and the university’s influence on it.',
+    description:
+      'The museum champions community memory, showing how local customs and university life intersected through migration, labor, and regional development.',
+    highlights: ['Oral history archive', 'Exhibition hall', 'Community partnerships']
+  }
+];
+
+const tours = [
+  {
+    id: 'heritage-walk',
+    title: 'Founders Heritage Walk',
+    duration: '45 min',
+    mood: 'Cultural',
+    stops: [
+      'Founders Hall',
+      'Museum of Local History',
+      'Student Memorial Garden',
+      'Old Observatory'
+    ]
+  },
+  {
+    id: 'science-trail',
+    title: 'Science & Discovery Trail',
+    duration: '30 min',
+    mood: 'Academic',
+    stops: ['Old Observatory', 'Innovation Lab', 'Research Courtyard']
+  }
+];
+
+const timeline = [
+  { year: '1924', title: 'University founded', detail: 'First campus opened with a small core of academic buildings.' },
+  { year: '1936', title: 'Observatory installed', detail: 'A new research wing was opened for scientific learning.' },
+  { year: '1954', title: 'Museum opens', detail: 'Community and regional heritage collections were formalized.' },
+  { year: '1988', title: 'Centennial recognition', detail: 'The campus expands heritage programs and public tours.' }
+];
+
+const stories = [
+  'Current students and alumni help preserve oral histories mapped to campus landmarks.',
+  'The university partners with local communities to restore and interpret historic structures.',
+  'Interactive exhibits blend architecture, science, and social memory to create richer campus stories.'
+];
+
+function App() {
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [query, setQuery] = useState('');
+  const [selectedItem, setSelectedItem] = useState(heritageItems[0]);
+
+  const categories = ['All', ...new Set(heritageItems.map((item) => item.category))];
+
+  const filteredItems = useMemo(() => {
+    return heritageItems.filter((item) => {
+      const categoryMatch = selectedCategory === 'All' || item.category === selectedCategory;
+      const queryMatch =
+        item.title.toLowerCase().includes(query.toLowerCase()) ||
+        item.summary.toLowerCase().includes(query.toLowerCase()) ||
+        item.location.toLowerCase().includes(query.toLowerCase());
+
+      return categoryMatch && queryMatch;
+    });
+  }, [query, selectedCategory]);
+
+  return (
+    <div className="app-shell">
+      <header className="topbar">
+        <div className="brand-group">
+          <div className="brand-mark">U</div>
+          <div>
+            <p className="eyebrow">UNIVERSITY HERITAGE</p>
+            <h1>Heritage Explorer</h1>
+          </div>
+        </div>
+        <nav className="nav">
+          <a href="#discover">Discover</a>
+          <a href="#campus">Campus Map</a>
+          <a href="#tours">Tours</a>
+          <a href="#stories">Stories</a>
+        </nav>
+      </header>
+
+      <main>
+        <section className="hero">
+          <div className="hero-copy">
+            <p className="eyebrow gold">Living campus archive</p>
+            <h2>Explore the university through memory, place, and learning.</h2>
+            <p>
+              Follow pathways across the campus, uncover historic landmarks, and experience the stories that shaped the academic community.
+            </p>
+            <div className="hero-actions">
+              <button className="primary-btn">Start a guided tour</button>
+              <button className="secondary-btn">View campus map</button>
+            </div>
+          </div>
+
+          <div className="search-card">
+            <label htmlFor="search">Search landmarks</label>
+            <input
+              id="search"
+              type="text"
+              placeholder="Search by building, story, or location"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+            <div className="quick-tags">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  className={selectedCategory === category ? 'tag active' : 'tag'}
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="stats-row">
+          <div className="stat-card">
+            <strong>04</strong>
+            <span>Featured heritage sites</span>
+          </div>
+          <div className="stat-card">
+            <strong>2</strong>
+            <span>Guided tours</span>
+          </div>
+          <div className="stat-card">
+            <strong>100+</strong>
+            <span>Archive records</span>
+          </div>
+          <div className="stat-card">
+            <strong>12k</strong>
+            <span>Campus visits yearly</span>
+          </div>
+        </section>
+
+        <section id="discover" className="discover-section">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow gold">Discover</p>
+              <h3>Heritage highlights</h3>
+            </div>
+            <span>{filteredItems.length} places</span>
+          </div>
+
+          <div className="feature-grid">
+            {filteredItems.map((item) => (
+              <button
+                key={item.id}
+                className={selectedItem.id === item.id ? 'heritage-card selected' : 'heritage-card'}
+                onClick={() => setSelectedItem(item)}
+              >
+                <div className="thumbnail" style={{ background: item.accent }}>
+                  <span>{item.era}</span>
+                </div>
+                <div className="card-copy">
+                  <p className="mini-tag">{item.category}</p>
+                  <h4>{item.title}</h4>
+                  <p>{item.summary}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <section id="campus" className="campus-section">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow gold">Campus map</p>
+              <h3>Explore the grounds</h3>
+            </div>
+          </div>
+
+          <div className="map-layout">
+            <div className="map-panel">
+              <div className="map-surface">
+                <div className="map-grid" />
+                {heritageItems.map((item) => (
+                  <button
+                    key={item.id}
+                    className={selectedItem.id === item.id ? 'map-pin active' : 'map-pin'}
+                    style={{ left: `${item.x}%`, top: `${item.y}%`, backgroundColor: item.accent }}
+                    onClick={() => setSelectedItem(item)}
+                    aria-label={item.title}
+                    title={item.title}
+                  >
+                    <span>{item.title}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <aside className="detail-panel">
+              <p className="mini-tag">Selected site</p>
+              <h3>{selectedItem.title}</h3>
+              <p className="detail-meta">
+                {selectedItem.category} · {selectedItem.era} · {selectedItem.location}
+              </p>
+              <p>{selectedItem.description}</p>
+              <ul>
+                {selectedItem.highlights.map((highlight) => (
+                  <li key={highlight}>{highlight}</li>
+                ))}
+              </ul>
+              <button className="primary-btn wide">Plan a visit</button>
+            </aside>
+          </div>
+        </section>
+
+        <section id="tours" className="tour-section">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow gold">Guided routes</p>
+              <h3>Popular tours</h3>
+            </div>
+          </div>
+
+          <div className="tour-grid">
+            {tours.map((tour) => (
+              <article key={tour.id} className="tour-card">
+                <div className="tour-header">
+                  <span className="mini-tag">{tour.mood}</span>
+                  <span>{tour.duration}</span>
+                </div>
+                <h4>{tour.title}</h4>
+                <ol>
+                  {tour.stops.map((stop) => (
+                    <li key={stop}>{stop}</li>
+                  ))}
+                </ol>
+                <button className="secondary-btn">View route</button>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="timeline-section">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow gold">Timeline</p>
+              <h3>Milestones in campus history</h3>
+            </div>
+          </div>
+
+          <div className="timeline">
+            {timeline.map((entry) => (
+              <div key={entry.year} className="timeline-item">
+                <span className="year">{entry.year}</span>
+                <div>
+                  <h4>{entry.title}</h4>
+                  <p>{entry.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="stories" className="stories-section">
+          <div className="section-heading">
+            <div>
+              <p className="eyebrow gold">Stories</p>
+              <h3>Why it matters</h3>
+            </div>
+          </div>
+
+          <div className="story-grid">
+            {stories.map((story, index) => (
+              <article key={story} className="story-card">
+                <span className="story-number">0{index + 1}</span>
+                <p>{story}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+}
+
+export default App;
